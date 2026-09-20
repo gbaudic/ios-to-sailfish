@@ -17,12 +17,26 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
 
-class Extractor:
+class Extractor(object):
     ''' Base class for data extraction plugins '''
+    
+    def __init__(self, input, output):
+        self.backup_dir = input
+        self.output_dir = output
     
     def get_db_source(self):
         raise NotImplementedError
+        
+    def should_run(self):
+        return True
+        
+    def get_absolute_db_source(self):
+        hash = self.get_db_source()
+        if hash == "Manifest.db":
+            return os.path.join(self.backup_dir, hash)
+        return os.path.join(self.backup_dir, hash[0:2], hash)
     
     def min_os_version(self):
         return 1

@@ -24,20 +24,21 @@ import os.path
 import xml.dom.minidom
 import sqlite3
 import sys
-from ../extractor import Extractor
+import extractor
 from email.utils import formatdate
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 
-class PodcastExtractor(Extractor):
+class PodcastExtractor(extractor.Extractor):
     """Export a list of channel objects to a local file in OPML 1.1 format.
 
     See www.opml.org for the OPML specification.
     """
     
-    def __init__(self):
+    def __init__(self, input, output):
         self.filename = "Podcasts.opml"
+        super().__init__(input, output)
     
     def get_db_source(self):
         return "398be25b8d2881e4a18865f018eb5d8e3c8fc962"
@@ -62,7 +63,7 @@ class PodcastExtractor(Extractor):
 
         body = doc.createElement('body')
         
-        conn = sqlite3.connect(get_db_source())
+        conn = sqlite3.connect(self.get_absolute_db_source())
         conn.row_factory = sqlite3.Row
 
         try:
@@ -72,12 +73,12 @@ class PodcastExtractor(Extractor):
             """)
 
             for row in cursor:
-                body.appendChild(self.createOutline(doc,
+                body.appendChild(self.create_outline(doc,
                     row["ZTITLE"],
                     row["ZITEMDESCRIPTION"],
                     row["ZFEEDURL"],
                     row["ZWEBPAGEURL"],
-                )
+                ))
 
         finally:
             conn.close()
@@ -86,7 +87,7 @@ class PodcastExtractor(Extractor):
 
         try:
             data = doc.toprettyxml(encoding='utf-8', indent='    ', newl=os.linesep)
-            with open(self.filename, 'wb') as fp:
+            with open(os.path.join(self.output_dir, self.filename), 'wb') as fp:
                 fp.write(data)
 
         except:

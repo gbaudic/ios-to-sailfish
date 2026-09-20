@@ -20,15 +20,20 @@
 
 import sqlite3
 import json
-from ../extractor import Extractor
+import os
+import extractor
+import logging
 
-class SMSExporter(Extractor):
+logger = logging.getLogger()
+
+class SMSExporter(extractor.Extractor):
+    ''' Exporter for SMS data (and only SMS) '''
     
     def get_db_source(self):
         return "3d0d7e5fb2ce288813306e4d4636395e047a3d28"
     
     def apply(self):
-        conn = sqlite3.connect(get_db_source(), detect_types=sqlite3.PARSE_COLNAMES)
+        conn = sqlite3.connect(self.get_absolute_db_source(), detect_types=sqlite3.PARSE_COLNAMES)
         conn.row_factory = lambda c, r: dict(zip([col[0] for col in c.description], r))
         cursor = conn.cursor()
 
@@ -46,7 +51,7 @@ class SMSExporter(Extractor):
             if len(handle['messages']):
                 handles.append(handle)
 
-        with open(output_json, 'w') as outfile:
+        with open(os.path.join(self.output_dir, "sms.json"), 'w') as outfile:
             json.dump(handles, outfile, indent=4)
 
 

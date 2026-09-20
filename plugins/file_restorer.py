@@ -21,17 +21,18 @@ import os
 import logging
 import shutil
 import sqlite3
-from ../extractor import Extractor
+import extractor
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
-class FileRestorer(Extractor):
+class FileRestorer(extractor.Extractor):
+    """ Abstract class for pure file extractors """
     
     def get_db_source(self):
         return "Manifest.db"
     
     def apply(self, pattern):
-        conn = sqlite3.connect(get_db_source())
+        conn = sqlite3.connect(self.get_absolute_db_source())
 
         try:
             cursor = conn.execute(
@@ -44,11 +45,11 @@ class FileRestorer(Extractor):
             for file_id, relative_path in cursor:
                 # Files are stored as:
                 #   <first two characters of fileId>/<fileId>
-                source_path = os.path.join(source_root, file_id[:2], file_id)
+                source_path = os.path.join(self.backup_dir, file_id[:2], file_id)
 
                 # relativePath always uses "/" as its separator.
                 destination_path = os.path.join(
-                    destination_root,
+                    self.output_dir,
                     *relative_path.split("/")
                 )
 
@@ -56,19 +57,31 @@ class FileRestorer(Extractor):
                 os.makedirs(os.path.dirname(destination_path), exist_ok=True)
 
                 logger.info(f"Copying {source_path} to {destination_path}...")
-                shutil.copy2(source_path, destination_path)
+                try:
+                    shutil.copy2(source_path, destination_path)
+                except FileNotFoundError:
+                    logger.warn('Referenced file does not exist')
 
         finally:
             conn.close()
+            
+    def should_run(self):
+        return False
         
 class PictureExtractor(FileRestorer):
     """ Dedicated restorer for images """
     
     def apply(self):
-        apply("Media/DCIM%")
+        super().apply("Media/DCIM%")
+        
+    def should_run(self):
+        return True
 
 class MMSAttachmentExtractor(FileRestorer):
     """ Dedicated restorer for MMS attachments """
     
     def apply(self):
-        apply("Library/SMS/Attachments%")
+        super().apply("Library/SMS/Attachments%")
+    
+    def should_run(self):
+        return True

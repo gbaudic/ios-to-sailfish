@@ -19,11 +19,23 @@
 
 import importlib.util
 import inspect
+import logging
 import os
+import sys
+import argparse
+from extractor import Extractor
 from pathlib import Path
 
-def file_path(hash):
-    return Path(hash[0:2], hash)
+logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+file_handler = logging.FileHandler("app.log")
+logger.addHandler(file_handler)
+
+parser = argparse.ArgumentParser(description='Export iPhone backup data to Sailfish OS interoperable formats')
+parser.add_argument('backup_path', help='Path to backup folder')
+parser.add_argument('output_dir', help='Output directory')
 
 
 def load_plugins(plugin_dir):
@@ -39,6 +51,22 @@ def load_plugins(plugin_dir):
         # Find subclasses of Extractor inside the module
         for name, obj in inspect.getmembers(mod, inspect.isclass):
             if issubclass(obj, Extractor) and obj is not Extractor:
-                plugins.append(obj())
+                logger.info('Found plugin: %s: %s', obj.__name__, obj.__doc__)
+                plugins.append(obj(args.backup_path, args.output_dir))
 
     return plugins
+
+
+if __name__ == '__main__':
+    args = parser.parse_args()
+    if not os.path.exists(args.backup_path):
+        logger.error('File does not exist')
+        sys.exit(1)
+    loaded_plugins = load_plugins('plugins')
+    for plugin in loaded_plugins:
+        logger.info('Running plugin %s', plugin.__class__.__name__)
+        try:
+            if plugin.should_run():
+                plugin.apply()
+        except NotImplementedError:
+            logger.warn('No implementation, skipping this plugin')

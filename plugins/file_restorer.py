@@ -85,3 +85,12 @@ class MMSAttachmentExtractor(FileRestorer):
     
     def should_run(self):
         return True
+        
+class Recordings(FileRestorer):
+    """ Dedicated restorer for voice memos """
+    
+    def apply(self):
+        super().apply("Recordings/%")
+    
+    def should_run(self):
+        return True

@@ -38,7 +38,7 @@ parser.add_argument('backup_path', help='Path to backup folder')
 parser.add_argument('output_dir', help='Output directory')
 
 
-def load_plugins(plugin_dir):
+def load_plugins(plugin_dir, backup, output):
     ''' Dynamically find the plugins '''
     plugins = []
     plugin_path = Path(plugin_dir)
@@ -52,7 +52,7 @@ def load_plugins(plugin_dir):
         for name, obj in inspect.getmembers(mod, inspect.isclass):
             if issubclass(obj, Extractor) and obj is not Extractor:
                 logger.info('Found plugin: %s: %s', obj.__name__, obj.__doc__)
-                plugins.append(obj(args.backup_path, args.output_dir))
+                plugins.append(obj(backup, output))
 
     return plugins
 
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     if not os.path.exists(args.backup_path):
         logger.error('File does not exist')
         sys.exit(1)
-    loaded_plugins = load_plugins('plugins')
+    loaded_plugins = load_plugins('plugins', args.backup_path, args.output_dir)
     for plugin in loaded_plugins:
         logger.info('Running plugin %s', plugin.__class__.__name__)
         try:

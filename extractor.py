@@ -25,6 +25,12 @@ class Extractor(object):
     def __init__(self, input, output):
         self.backup_dir = input
         self.output_dir = output
+        
+    def set_backup_dir(self, backup):
+        self.backup_dir = backup
+        
+    def set_output_dir(self, output):
+        self.output_dir = output
     
     def get_db_source(self):
         raise NotImplementedError

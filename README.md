@@ -8,6 +8,7 @@ A collection of Python scripts to easily migrate from iOS to SailfishOS
   * SMS/MMS/RCS messages (text only), as a JSON file for import with commhistory
   * Podcasts, as an OPML file compatible with gPodder and AntennaPod
   * Recordings, as-is
+  * User files, as-is
 
 ## Usage
 

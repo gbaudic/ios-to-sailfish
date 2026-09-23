@@ -86,11 +86,21 @@ class MMSAttachmentExtractor(FileRestorer):
     def should_run(self):
         return True
         
-class Recordings(FileRestorer):
+class RecordingExtractor(FileRestorer):
     """ Dedicated restorer for voice memos """
     
     def apply(self):
         super().apply("Recordings/%")
+    
+    def should_run(self):
+        return True
+
+class UserFilesExtractor(FileRestorer):
+    """ Dedicated restorer for user files """
+    
+    def apply(self):
+        super().apply("Documents/%")
+        super().apply("File Provider Storage/%")
     
     def should_run(self):
         return True

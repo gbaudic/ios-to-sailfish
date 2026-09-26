@@ -84,8 +84,8 @@ class IosToSailfishUI(tk.Tk):
         bottom_frame = ttk.Frame(self)
         bottom_frame.pack(side=tk.BOTTOM, fill=tk.X, padx=10, pady=10)
 
-        run_button = ttk.Button(bottom_frame, text="Run", command=self.run_selected_plugins)
-        run_button.pack(side=tk.RIGHT)
+        self.run_button = ttk.Button(bottom_frame, text="Run", command=self.run_selected_plugins)
+        self.run_button.pack(side=tk.RIGHT)
 
     def _create_dir_row(self, parent, label_text, var, row):
         label = ttk.Label(parent, text=label_text)
@@ -152,6 +152,13 @@ class IosToSailfishUI(tk.Tk):
         if not selected_plugins:
             messagebox.showwarning(message="No plugins selected to run.")
             return
+        if not self.input_dir.get():
+            messagebox.showerror(message="No input directory chosen!")
+            return
+        if not self.output_dir.get():
+            messagebox.showerror(message="No output directory chosen!")
+            return
+        self.run_button.config(state=tk.DISABLED)
 
         print(f"Running {len(selected_plugins)} plugin(s)...")
         for plugin in selected_plugins:
@@ -161,6 +168,8 @@ class IosToSailfishUI(tk.Tk):
                 plugin.apply()
             except Exception as e:
                 print(f"Plugin {plugin.__class__.__name__} failed with error: {e}")
+        self.run_button.config(state=tk.NORMAL)
+
 
 if __name__ == "__main__":
     app = IosToSailfishUI()

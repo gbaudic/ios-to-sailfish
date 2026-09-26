@@ -1,5 +1,5 @@
 # ios-to-sailfish
-A collection of Python scripts to easily migrate from iOS to SailfishOS
+A collection of Python scripts to ease migration from iOS to SailfishOS
 
 ## Supported data
 
@@ -9,14 +9,21 @@ A collection of Python scripts to easily migrate from iOS to SailfishOS
   * Podcasts, as an OPML file compatible with gPodder and AntennaPod
   * Recordings, as-is
   * User files, as-is
+  
+## NOT supported data
+
+  * Notes: export them as text or Markdown and get them as User files
+  * Call history: only available in encrypted backups
+  * WLAN credentials
+  * Reminders, unless they have a date set in which case they will appear in the Calendar data
 
 ## Usage
 
-As a command-line tool:
+As a command-line tool (will export everything):
 
     python3 ios2sailfish.py <backup directory> <output directory>
 
-Or as a GUI:
+Or as a very basic GUI (allows you to choose what to export):
 
     python3 ios2sailfish_ui.py
 

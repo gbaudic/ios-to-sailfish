@@ -21,12 +21,12 @@
 import sqlite3
 import json
 import os
-import extractor
+from extractor import Extractor
 import logging
 
 logger = logging.getLogger()
 
-class SMSExporter(extractor.Extractor):
+class SMSExporter(Extractor):
     ''' Exporter for SMS data (and only SMS) '''
     
     def get_db_source(self):

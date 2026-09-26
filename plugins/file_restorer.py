@@ -21,11 +21,11 @@ import os
 import logging
 import shutil
 import sqlite3
-import extractor
+from extractor import Extractor
 
 logger = logging.getLogger()
 
-class FileRestorer(extractor.Extractor):
+class FileRestorer(Extractor):
     """ Abstract class for pure file extractors """
     
     def get_db_source(self):
@@ -67,7 +67,8 @@ class FileRestorer(extractor.Extractor):
             
     def should_run(self):
         return False
-        
+
+
 class PictureExtractor(FileRestorer):
     """ Dedicated restorer for images """
     
@@ -77,6 +78,7 @@ class PictureExtractor(FileRestorer):
     def should_run(self):
         return True
 
+
 class MMSAttachmentExtractor(FileRestorer):
     """ Dedicated restorer for MMS attachments """
     
@@ -85,7 +87,8 @@ class MMSAttachmentExtractor(FileRestorer):
     
     def should_run(self):
         return True
-        
+
+
 class RecordingExtractor(FileRestorer):
     """ Dedicated restorer for voice memos """
     
@@ -94,6 +97,7 @@ class RecordingExtractor(FileRestorer):
     
     def should_run(self):
         return True
+
 
 class UserFilesExtractor(FileRestorer):
     """ Dedicated restorer for user files """

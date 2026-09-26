@@ -24,17 +24,14 @@ import os.path
 import xml.dom.minidom
 import sqlite3
 import sys
-import extractor
+from extractor import Extractor
 from email.utils import formatdate
 
 logger = logging.getLogger()
 
 
-class PodcastExtractor(extractor.Extractor):
-    """Export a list of channel objects to a local file in OPML 1.1 format.
-
-    See www.opml.org for the OPML specification.
-    """
+class PodcastExtractor(Extractor):
+    """Export the list of podcasts to a local file in OPML 1.1 format."""
     
     def __init__(self, input, output):
         self.filename = "Podcasts.opml"

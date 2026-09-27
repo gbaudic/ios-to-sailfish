@@ -9,6 +9,7 @@ A collection of Python scripts to ease migration from iOS to SailfishOS
   * Podcasts, as an OPML file compatible with gPodder and AntennaPod
   * Recordings, as-is
   * User files, as-is
+  * Loyalty cards from Fira, as a JSON file for Sailcards
   
 ## NOT supported data
 

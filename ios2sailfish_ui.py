@@ -30,6 +30,7 @@ from pathlib import Path
 from extractor import Extractor
 from ios2sailfish import load_plugins
 
+logger = logging.getLogger()
 
 class IosToSailfishUI(tk.Tk):
     def __init__(self):
@@ -169,6 +170,7 @@ class IosToSailfishUI(tk.Tk):
             except Exception as e:
                 print(f"Plugin {plugin.__class__.__name__} failed with error: {e}")
         self.run_button.config(state=tk.NORMAL)
+        print("Done")
 
 
 if __name__ == "__main__":

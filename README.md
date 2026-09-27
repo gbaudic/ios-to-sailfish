@@ -10,6 +10,7 @@ A collection of Python scripts to ease migration from iOS to SailfishOS
   * Recordings, as-is
   * User files, as-is
   * Loyalty cards from Fira, as a JSON file for Sailcards
+  * Calendar events, as a single .ics file
   
 ## NOT supported data
 

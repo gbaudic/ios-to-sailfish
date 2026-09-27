@@ -51,7 +51,7 @@ def load_plugins(plugin_dir, backup, output):
         # Find subclasses of Extractor inside the module
         for name, obj in inspect.getmembers(mod, inspect.isclass):
             if issubclass(obj, Extractor) and obj is not Extractor:
-                logger.info('Found plugin: %s: %s', obj.__name__, obj.__doc__)
+                logger.info('Found plugin: %s: %s', obj.__name__, obj.__doc__.strip())
                 plugins.append(obj(backup, output))
 
     return plugins

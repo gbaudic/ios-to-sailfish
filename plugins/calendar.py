@@ -31,5 +31,54 @@ class Calendar(Extractor):
         return "2041457d5fe04d39d0ab481178355df6781e6858"
     
     def apply(self):
-        pass
+        
+        conn = sqlite3.connect(self.get_absolute_db_source())
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        events = list()
+        try:
+            cursor.execute("""SELECT
+                    summary as SUMMARY, 
+                    location_id, 
+                    strftime('%Y%m%dT%H%M%SZ', substr(start_date, 1, 9) + 978307200, 'unixepoch') as DTSTART, 
+                    start_tz,
+                    strftime('%Y%m%dT%H%M%SZ', substr(end_date, 1, 9) + 978307200, 'unixepoch') as DTEND, 
+                    end_tz,
+                    all_day,
+                    calendar_id,
+                    unique_identifier as UID
+                FROM CalendarItem
+            """)
+
+            for row in cursor.fetchall():
+                event = dict()
+                event['UID'] = row['UID']
+                event['DTSTART'] = row['DTSTART']
+                event['DTEND'] = row['DTEND']
+                event['DTSTAMP'] = row['DTSTART']
+                event['SUMMARY'] = row['SUMMARY']
+                event['DESCRIPTION'] = ''
+                
+                # Fetch location if any
+                if row['location_id'] != 0:
+                    cursor.execute('SELECT title as LOCATION from Location where ROWID = ?',(row['location_id'],))
+                    for location in cursor.fetchall():
+                        event['LOCATION'] = location['LOCATION']
+                
+                events.append(event)
+
+        finally:
+            conn.close()
+        
+        if events:
+            with open(os.path.join(self.output_dir, 'Events.ics'), 'w', encoding='utf-8') as fp:
+                fp.write("BEGIN:VCALENDAR\n")
+                fp.write("VERSION:2.0\n")
+                for event in events:
+                    fp.write("BEGIN:VEVENT\n")
+                    for key, value in event.items():
+                        fp.write(f"{key}:{value}\n")
+                    fp.write("END:VEVENT\n")
+                fp.write("END:VCALENDAR")
 

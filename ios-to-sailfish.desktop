@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=ios-to-sailfish
+Exec=ios-to-sailfish
+Name=iOS to Sailfish
+
+[X-Sailjail]
+# Replace with your organization as a reverse domain name
+OrganizationName=fr.gwilhermbaudic
+# ApplicationName does not have to be identical to Name
+ApplicationName=ios-to-sailfish
+# Add the required permissions here
+Permissions=UserDirs;RemovableMedia;Documents

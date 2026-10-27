@@ -1,11 +1,15 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Pickers 1.0
+import io.thp.pyotherside 1.4
 
 Page {
     id: page
 
     // The effective value will be restricted by ApplicationWindow.allowedOrientations
     allowedOrientations: Orientation.All
+
+    property string directoryPath: ""
 
     // To enable PullDownMenu, place our content in a SilicaFlickable
     SilicaFlickable {
@@ -14,8 +18,8 @@ Page {
         // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
         PullDownMenu {
             MenuItem {
-                text: qsTr("Show Page 2")
-                onClicked: pageStack.animatorPush(Qt.resolvedUrl("SecondPage.qml"))
+                text: qsTr("Select backup folder")
+                onClicked: pageStack.push(backupFolderPickerPage)
             }
         }
 
@@ -30,14 +34,37 @@ Page {
             width: page.width
             spacing: Theme.paddingLarge
             PageHeader {
-                title: qsTr("UI Template")
+                title: qsTr("iOS to Sailfish")
             }
             Label {
                 x: Theme.horizontalPageMargin
-                text: qsTr("Hello Sailors")
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+                verticalAlignment: AlignVCenter
+                text: qsTr("Please select the folder containing backup data")
+                visible: directoryPath === ""
             }
+        }
+
+        Component {
+            id: backupFolderPickerPage
+            FolderPickerPage {
+                dialogTitle: qsTr("Select backup folder")
+                showSystemFiles: true
+                onSelectedPathChanged: {
+                    page.directoryPath = selectedPath
+                    pageStack.pop()
+                }
+            }
+        }
+    }
+
+    Python {
+        id: python
+
+        Component.onCompleted: {
+            addImportPath(Qt.resolvedUrl('.'));
+
+            //importModule('datadownloader', function () {});
+
         }
     }
 }

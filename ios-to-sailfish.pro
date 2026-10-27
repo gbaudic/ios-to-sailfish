@@ -16,6 +16,14 @@ CONFIG += sailfishapp_qml
 
 SOURCES +=
 
+DEPLOY_PATH = /usr/share/$${TARGET}
+
+backup.files = ios-backup-core/src/*
+backup.path = $${DEPLOY_PATH}/
+
+INSTALLS += \
+    backup
+
 DISTFILES += qml/ios-to-sailfish.qml \
     qml/cover/CoverPage.qml \
     qml/pages/FirstPage.qml \

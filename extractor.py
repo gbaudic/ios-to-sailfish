@@ -20,11 +20,12 @@
 import os
 
 class Extractor(object):
-    ''' Base class for data extraction plugins '''
+    """ Base class for data extraction plugins """
     
     def __init__(self, input, output):
         self.backup_dir = input
         self.output_dir = output
+        self.is_dry_run = False
         
     def set_backup_dir(self, backup):
         self.backup_dir = backup
@@ -36,13 +37,18 @@ class Extractor(object):
         raise NotImplementedError
         
     def should_run(self):
+        """ Set if this extractor should run """
         return True
+
+    def set_dry_run(self, dry_run):
+        """ Toggle dry run (i.e., simulated run) """
+        self.is_dry_run = dry_run
         
     def get_absolute_db_source(self):
-        hash = self.get_db_source()
-        if hash == "Manifest.db":
-            return os.path.join(self.backup_dir, hash)
-        return os.path.join(self.backup_dir, hash[0:2], hash)
+        db_hash = self.get_db_source()
+        if db_hash == "Manifest.db":
+            return os.path.join(self.backup_dir, db_hash)
+        return os.path.join(self.backup_dir, db_hash[0:2], db_hash)
     
     def min_os_version(self):
         return 1
@@ -51,4 +57,5 @@ class Extractor(object):
         return 99
         
     def apply(self):
+        """ Applies the extractor to the data """
         raise NotImplementedError

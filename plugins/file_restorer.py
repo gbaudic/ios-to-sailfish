@@ -50,7 +50,7 @@ class FileRestorer(Extractor):
                 # relativePath always uses "/" as its separator.
                 destination_path = os.path.join(
                     self.output_dir,
-                    *relative_path.split("/")
+                    relative_path.split("/")[-1]
                 )
 
                 # Create any intermediate directories.
@@ -60,7 +60,7 @@ class FileRestorer(Extractor):
                 try:
                     shutil.copy2(source_path, destination_path)
                 except FileNotFoundError:
-                    logger.warn('Referenced file does not exist')
+                    logger.warning('Referenced file does not exist')
 
         finally:
             conn.close()
@@ -70,7 +70,11 @@ class FileRestorer(Extractor):
 
 
 class PictureExtractor(FileRestorer):
-    """ Dedicated restorer for images """
+    """ Dedicated restorer for images and videos"""
+
+    def __init__(self, input, output):
+        super().__init__(input, output)
+        self.output_dir = os.path.join(os.path.expanduser("~"), "Pictures", "Camera")
     
     def apply(self):
         super().apply("Media/DCIM%")
@@ -101,6 +105,10 @@ class RecordingExtractor(FileRestorer):
 
 class UserFilesExtractor(FileRestorer):
     """ Dedicated restorer for user files """
+
+    def __init__(self, input, output):
+        super().__init__(input, output)
+        self.output_dir = os.path.join(os.path.expanduser("~"), "Documents")
     
     def apply(self):
         super().apply("Documents/%")

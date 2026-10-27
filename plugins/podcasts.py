@@ -30,6 +30,28 @@ from email.utils import formatdate
 logger = logging.getLogger()
 
 
+def create_node(doc, name, content):
+    """Return an XML Element node with tag name "name" and text content "content".
+
+    E.g. <name>content</name>.
+    """
+    node = doc.createElement(name)
+    node.appendChild(doc.createTextNode(content))
+    return node
+
+
+def create_outline(doc, title, text, xml_url, html_url):
+    """Return an OPML outline as XML Element node in the supplied document."""
+    outline = doc.createElement('outline')
+    outline.setAttribute('title', title)
+    outline.setAttribute('text', text)
+    outline.setAttribute('xmlUrl', xml_url)
+    if html_url is not None:
+        outline.setAttribute('htmlUrl', html_url)
+    outline.setAttribute('type', 'rss')
+    return outline
+
+
 class PodcastExtractor(Extractor):
     """Export the list of podcasts to a local file in OPML 1.1 format."""
     
@@ -44,7 +66,7 @@ class PodcastExtractor(Extractor):
     def apply(self):
         """Write an XML document containing metadata for each podcast in the database.
 
-        OPML 2.0 specification: http://www.opml.org/spec2
+        OPML 2.0 specification: https://www.opml.org/spec2
         """
 
         doc = xml.dom.minidom.Document()
@@ -54,8 +76,8 @@ class PodcastExtractor(Extractor):
         doc.appendChild(opml)
 
         head = doc.createElement('head')
-        head.appendChild(self.create_node(doc, 'title', 'Podcasts subscriptions'))
-        head.appendChild(self.create_node(doc, 'dateCreated', formatdate(localtime=True)))
+        head.appendChild(create_node(doc, 'title', 'Podcasts subscriptions'))
+        head.appendChild(create_node(doc, 'dateCreated', formatdate(localtime=True)))
         opml.appendChild(head)
 
         body = doc.createElement('body')
@@ -70,12 +92,12 @@ class PodcastExtractor(Extractor):
             """)
 
             for row in cursor:
-                body.appendChild(self.create_outline(doc,
-                    row["ZTITLE"],
-                    row["ZITEMDESCRIPTION"],
-                    row["ZFEEDURL"],
-                    row["ZWEBPAGEURL"],
-                ))
+                body.appendChild(create_outline(doc,
+                                                row["ZTITLE"],
+                                                row["ZITEMDESCRIPTION"],
+                                                row["ZFEEDURL"],
+                                                row["ZWEBPAGEURL"],
+                                                ))
 
         finally:
             conn.close()
@@ -90,24 +112,4 @@ class PodcastExtractor(Extractor):
         except:
             logger.error('Could not open file for writing: %s', self.filename,
                     exc_info=True)
-
-    def create_node(self, doc, name, content):
-        """Return an XML Element node with tag name "name" and text content "content".
-
-        E.g. <name>content</name>.
-        """
-        node = doc.createElement(name)
-        node.appendChild(doc.createTextNode(content))
-        return node
-
-    def create_outline(self, doc, title, text, xml_url, html_url):
-        """Return an OPML outline as XML Element node in the supplied document."""
-        outline = doc.createElement('outline')
-        outline.setAttribute('title', title)
-        outline.setAttribute('text', text)
-        outline.setAttribute('xmlUrl', xml_url)
-        if html_url is not None:
-            outline.setAttribute('htmlUrl', html_url)
-        outline.setAttribute('type', 'rss')
-        return outline
 

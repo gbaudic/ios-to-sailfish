@@ -2,13 +2,14 @@
 Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=ios-to-sailfish
-Exec=ios-to-sailfish
+Exec=sailfish-qml ios-to-sailfish
 Name=iOS to Sailfish
 
 [X-Sailjail]
-# Replace with your organization as a reverse domain name
 OrganizationName=fr.gwilhermbaudic
-# ApplicationName does not have to be identical to Name
 ApplicationName=ios-to-sailfish
-# Add the required permissions here
-Permissions=UserDirs;RemovableMedia;Documents
+# A lot of permissions asked here:
+# * Calendar, CommunicationHistory, Contacts, Documents, Messages, Pictures, Videos: to add migrated data at its place
+# * MediaIndexing: just in case because we will add pictures and videos
+# * Downloads, RemovableMedia: to access the backup
+Permissions=Calendar;CommunicationHistory;Contacts;Documents;Downloads;MediaIndexing;Messages;Pictures;RemovableMedia;Videos

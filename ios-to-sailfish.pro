@@ -26,9 +26,10 @@ INSTALLS += \
 
 DISTFILES += qml/ios-to-sailfish.qml \
     qml/cover/CoverPage.qml \
+    qml/pages/AboutPage.qml \
     qml/pages/FirstPage.qml \
-    qml/pages/SecondPage.qml \
     qml/pages/PasswordDialog.qml \
+    qml/pages/SecondPage.qml \
     rpm/ios-to-sailfish.changes.in \
     rpm/ios-to-sailfish.changes.run.in \
     rpm/ios-to-sailfish.spec \

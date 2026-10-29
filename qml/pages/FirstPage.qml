@@ -39,6 +39,10 @@ Page {
                 text: qsTr("Select backup folder")
                 onClicked: pageStack.push(backupFolderPickerPage)
             }
+            MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+            }
         }
 
         // Tell SilicaFlickable the height of its content.
@@ -81,7 +85,7 @@ Page {
         Component.onCompleted: {
             addImportPath(Qt.resolvedUrl('.'));
 
-            //importModule('datadownloader', function () {});
+            importModule('bridge', function () {});
 
         }
     }

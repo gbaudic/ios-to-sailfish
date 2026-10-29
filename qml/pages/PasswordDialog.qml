@@ -33,6 +33,7 @@ Dialog {
         }
         
         Label {
+            wrapMode: Text.WordWrap
             text: qsTr("Your backup is encrypted. Enter the password below to decrypt it and continue.")
             color: Theme.highlightColor
             width: parent.width

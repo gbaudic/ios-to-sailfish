@@ -25,6 +25,7 @@ INSTALLS += \
     backup
 
 DISTFILES += qml/ios-to-sailfish.qml \
+    qml/bridge.py \
     qml/cover/CoverPage.qml \
     qml/pages/AboutPage.qml \
     qml/pages/FirstPage.qml \

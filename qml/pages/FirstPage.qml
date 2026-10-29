@@ -19,7 +19,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
-import io.thp.pyotherside 1.4
 
 Page {
     id: page
@@ -60,7 +59,8 @@ Page {
             }
             Label {
                 x: Theme.horizontalPageMargin
-                verticalAlignment: AlignVCenter
+                verticalAlignment: "AlignVCenter"
+                horizontalAlignment: "AlignHCenter"
                 text: qsTr("Please select the folder containing backup data")
                 visible: directoryPath === ""
             }
@@ -79,14 +79,5 @@ Page {
         }
     }
 
-    Python {
-        id: python
 
-        Component.onCompleted: {
-            addImportPath(Qt.resolvedUrl('.'));
-
-            importModule('bridge', function () {});
-
-        }
-    }
 }

@@ -18,17 +18,68 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Contacts 1.0
 import io.thp.pyotherside 1.4
 
 Page {
     id: selectPage
+    
+    property bool isMigrating: false
+    property bool isEncrypted: false
+    
+    property int contactCount: 0
+    property int callCount: 0
+    property int podcastCount: 0
+    property int documentCount: 0
+    property int noteCount: 0
+    property int eventCount: 0
+    property int mediaCount: 0
+    property int loyaltyCount: 0
+    property int messageCount: 0
 
     // The effective value will be restricted by ApplicationWindow.allowedOrientations
     allowedOrientations: Orientation.All
 
     SilicaListView {
         id: listView
-        model: model
+        model: [
+            { name: qsTr("Contacts (%1)").arg(contactCount), 
+              count: contactCount,
+              enabled: contactCount > 0,
+              description: qsTr("Migrate the contacts with ContactImporter") },
+            { name: qsTr("Call history (%1)").arg(callCount), 
+              count: callCount,
+              enabled: isEncrypted && callCount > 0,
+              description: qsTr("Migrate the call history") },
+            { name: qsTr("Podcast subscriptions (%1)").arg(podcastCount), 
+              count: podcastCount,
+              enabled: podcastCount > 0,
+              description: qsTr("Export the podcast subscriptions to an OPML file, suitable for import in AntennaPod or gPodder. Podcast downloads are not managed.") },
+            { name: qsTr("Documents (%1)").arg(documentCount), 
+              count: documentCount,
+              enabled: documentCount > 0,
+              description: qsTr("Migrate application documents to your Documents folder") },
+            { name: qsTr("Notes (%1)").arg(noteCount), 
+              count: noteCount,
+              enabled: noteCount > 0,
+              description: qsTr("Export the notes to your Documents folder") },
+            { name: qsTr("Calendar events (%1)").arg(eventCount), 
+              count: eventCount,
+              enabled: eventCount > 0,
+              description: qsTr("Export all events as an .ics file") },
+            { name: qsTr("Photos and Videos (%1)").arg(mediaCount), 
+              count: mediaCount,
+              enabled: mediaCount > 0,
+              description: qsTr("Migrate the photos and videos to their respective folders") },
+            { name: qsTr("Loyalty cards (%1)").arg(loyaltyCount), 
+              count: loyaltyCount,
+              enabled: loyaltyCount > 0,
+              description: qsTr("Export data from Fira as a JSON file compatible with Sailcards. Wallet is not supported yet") },
+            { name: qsTr("Messages (%1)").arg(messageCount), 
+              count: messageCount,
+              enabled: messageCount > 0,
+              description: qsTr("Migrate SMS, MMS and RCS messages with their attachments") }
+        ]
         anchors.fill: parent
         header: PageHeader {
             title: qsTr("Select data to migrate")
@@ -37,12 +88,22 @@ Page {
             id: delegate
             contentHeight: Theme.itemSizeMedium
             property var itemData: model
+            property alias checked: checkbox.checked
 
             TextSwitch {
                 id: checkbox
-                text: qsTr(itemData.name).arg(itemData.count)
+                text: itemData.name
                 description: itemData.description
-                checked: true
+                checked: itemData.enabled
+                enabled: itemData.enabled
+            }
+            ProgressBar {
+                width: parent.width
+                minimumValue: 0
+                maximumValue: itemData.count
+                value: 0
+                valueText: value === maximumValue ? qsTr("Done") : qsTr("%1 / %2").arg(value).arg(maximumValue)
+                visible: isMigrating && checkbox.checked
             }
             
             onClicked: console.log("Clicked " + index)
@@ -52,14 +113,13 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Start migration")
-                onClicked: console.log("Clicked menu item")
+                onClicked: { 
+                    remorse.execute(qsTr("Migrating..."), doMigrate)
+                }
             }
         }
-    }
-    
-    ListModel
-    {
-        id: model
+        
+        RemorsePopup { id: remorse }
     }
     
     Component {
@@ -80,8 +140,20 @@ Page {
             }
         }
     }
+    
+    ContactImporter {
+        id: contactImporter
+    }
 
     function showError(msg) {
         pageStack.push(errorDialogComponent, { messageText: msg })
+    }
+    
+    function doMigrate() {
+        isMigrating = true
+    }
+    
+    function importContact(vcard) {
+        contactImporter.importContactsData(vcard)
     }
 }

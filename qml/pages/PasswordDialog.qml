@@ -64,6 +64,8 @@ Dialog {
             if (password.length === 0) {
                 errorLabel.visible = true
                 errorLabel.text = qsTr("Password cannot be empty")
+            } else {
+                python.forwardPassword(password)
             }
         }
     }

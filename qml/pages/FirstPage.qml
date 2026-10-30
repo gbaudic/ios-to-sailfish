@@ -27,6 +27,13 @@ Page {
     allowedOrientations: Orientation.All
 
     property string directoryPath: ""
+    
+    Connections {
+        target: python
+        onEncryptedBackup: pageStack.push(Qt.resolvedUrl("PasswordDialog.qml"))
+        onNotABackup: {}
+        onDecryptionError: {}
+    }
 
     // To enable PullDownMenu, place our content in a SilicaFlickable
     SilicaFlickable {
@@ -53,6 +60,7 @@ Page {
             id: column
 
             width: page.width
+            height: page.height
             spacing: Theme.paddingLarge
             PageHeader {
                 title: qsTr("iOS to Sailfish")
@@ -65,19 +73,19 @@ Page {
                 visible: directoryPath === ""
             }
         }
-
-        Component {
-            id: backupFolderPickerPage
-            FolderPickerPage {
-                dialogTitle: qsTr("Select backup folder")
-                showSystemFiles: true
-                onSelectedPathChanged: {
-                    page.directoryPath = selectedPath
-                    pageStack.pop()
-                }
+    }
+    
+    Component {
+        id: backupFolderPickerPage
+        FolderPickerPage {
+            dialogTitle: qsTr("Select backup folder")
+            showSystemFiles: true
+            onSelectedPathChanged: {
+                page.directoryPath = selectedPath
+                pageStack.pop()
+                python.forwardDirectory(page.directoryPath)
             }
         }
     }
-
 
 }

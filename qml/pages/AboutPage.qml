@@ -73,8 +73,8 @@ Page {
                         qsTr("Website: ") + 'https://github.com/gbaudic/ios-to-sailfish',
                         '',
                         'ios-backup-core ' + python.backup_version,
-                        'PyOtherSide ' + python.plugin_version(),
-                        'Python ' + python.python_version()
+                        'PyOtherSide ' + python.pluginVersion(),
+                        'Python ' + python.pythonVersion()
                     ].join('\n')
                 }
             }

@@ -27,12 +27,23 @@ Page {
     allowedOrientations: Orientation.All
 
     property string directoryPath: ""
+    property bool isEncrypted: false
     
     Connections {
         target: python
-        onEncryptedBackup: pageStack.push(Qt.resolvedUrl("PasswordDialog.qml"))
-        onNotABackup: {}
-        onDecryptionError: {}
+        onEncryptedBackup: {
+            isEncrypted = true
+            pageStack.push(Qt.resolvedUrl("PasswordDialog.qml"))
+        }
+        onNotABackup: {
+            Notices.show(qsTr("The selected folder %1 is not a valid backup").arg(directoryPath))
+        }
+        onDecryptionError: {
+            Notices.show(qsTr("Error while decrypting backup"))
+        }
+        onMigrationReady: {
+            pageStack.push(Qt.resolvedUrl("SecondPage.qml"), { isEncrypted: isEncrypted })
+        }
     }
 
     // To enable PullDownMenu, place our content in a SilicaFlickable
@@ -63,7 +74,7 @@ Page {
             height: page.height
             spacing: Theme.paddingLarge
             PageHeader {
-                title: qsTr("iOS to Sailfish")
+                title: qsTr("Appleseed")
             }
             Label {
                 x: Theme.horizontalPageMargin

@@ -39,7 +39,7 @@ Page {
             spacing: Theme.paddingMedium
 
             PageHeader {
-                title: qsTr("About iOS to Sailfish")
+                title: qsTr("About Appleseed")
             }
 
             Column {
@@ -53,7 +53,7 @@ Page {
 
                 Column {
                     Label {
-                        text: qsTr('iOS to Sailfish %1').arg(python.ui_version)
+                        text: qsTr('Appleseed %1').arg(python.ui_version)
                         color: Theme.highlightColor
                     }
 

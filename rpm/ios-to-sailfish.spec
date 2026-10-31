@@ -4,6 +4,7 @@ Summary:    Migrator helper from iOS
 Version:    0.1
 Release:    1
 License:    GPLv3+
+BuildArch:  noarch
 Group:      Applications/Utility
 URL:        https://github.com/gbaudic/ios-to-sailfish
 Source0:    %{name}-%{version}.tar.bz2
@@ -17,7 +18,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-iOS to Sailfish is a migration helper to assist in importing selected contents of an iOS backup to a Sailfish device.
+Appleseed is a migration helper to assist in importing selected contents of an iOS backup to a Sailfish device.
 
 
 %prep

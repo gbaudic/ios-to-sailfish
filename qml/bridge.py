@@ -33,7 +33,7 @@ def open_backup(path, password=None):
         elif 'Backup is encrypted' in msg:
             pyotherside.send('encrypted-backup')
         elif 'Failed to decrypt' in msg:
-            pyotherside.send('wrong-password')
+            pyotherside.send('decryption-error')
         
     pass
 
@@ -63,7 +63,7 @@ def migrate_messages():
     pass
 
 def migrate_pictures_and_videos():
-    extractor = PhotoExtractor()
+    media_extractor = PhotoExtractor()
     pass
 
 def migrate_user_docs():

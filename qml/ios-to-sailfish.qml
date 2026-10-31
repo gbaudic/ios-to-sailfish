@@ -18,21 +18,25 @@ ApplicationWindow {
         signal encryptedBackup()
         signal notABackup()
         signal decryptionError()
-        signal pythonError(message: string)
-        signal migrationProgress(type: string, index: int)
+        signal analysisComplete(string type, int count)
+        signal migrationReady()
+        signal migrationProgress(string type, int index)
+        signal migrationComplete()
+        signal pythonError(string message)
 
         Component.onCompleted: {
             setHandler('encrypted-backup', encryptedBackup)
             setHandler('not-a-backup', notABackup)
             setHandler('decryption-error', decryptionError)
+            setHandler('migration-ready', migrationReady)
 
             addImportPath(Qt.resolvedUrl('.'));
 
             importModule('bridge', function () {});
         }
 
-        function migrate() {
-            call('bridge.migrate')
+        function migrate(types) {
+            call('bridge.migrate', [types])
         }
 
         function forwardPassword(password) {

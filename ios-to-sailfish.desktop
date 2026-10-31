@@ -3,7 +3,7 @@ Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=ios-to-sailfish
 Exec=sailfish-qml ios-to-sailfish
-Name=iOS to Sailfish
+Name=Appleseed
 
 [X-Sailjail]
 OrganizationName=fr.gwilhermbaudic

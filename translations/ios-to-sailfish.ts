@@ -4,14 +4,6 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>About iOS to Sailfish</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>iOS to Sailfish %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Gwilherm Baudic and contributors</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21,6 +13,14 @@
     </message>
     <message>
         <source>Website: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About Appleseed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Appleseed %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -42,11 +42,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>iOS to Sailfish</source>
+        <source>Please select the folder containing backup data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please select the folder containing backup data</source>
+        <source>The selected folder %1 is not a valid backup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while decrypting backup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Appleseed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -144,6 +152,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Migration completed! You can now close this app</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Select data to migrate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -161,6 +173,10 @@
     </message>
     <message>
         <source>Migrating...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Migration already done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

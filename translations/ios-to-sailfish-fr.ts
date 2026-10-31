@@ -4,14 +4,6 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>About iOS to Sailfish</source>
-        <translation>A propos de iOS to Sailfish</translation>
-    </message>
-    <message>
-        <source>iOS to Sailfish %1</source>
-        <translation>iOS to Sailfish %1</translation>
-    </message>
-    <message>
         <source>Gwilherm Baudic and contributors</source>
         <translation>Gwilherm Baudic et les contributeurs</translation>
     </message>
@@ -22,6 +14,14 @@
     <message>
         <source>Website: </source>
         <translation>Site web : </translation>
+    </message>
+    <message>
+        <source>About Appleseed</source>
+        <translation>A propos d&apos;Appleseed</translation>
+    </message>
+    <message>
+        <source>Appleseed %1</source>
+        <translation>Appleseed %1</translation>
     </message>
 </context>
 <context>
@@ -42,12 +42,20 @@
         <translation>A propos</translation>
     </message>
     <message>
-        <source>iOS to Sailfish</source>
-        <translation>iOS to Sailfish</translation>
-    </message>
-    <message>
         <source>Please select the folder containing backup data</source>
         <translation>Veuillez sélectionner le dossier contenant la sauvegarde</translation>
+    </message>
+    <message>
+        <source>The selected folder %1 is not a valid backup</source>
+        <translation>Le dossier sélectionné %1 n&apos;est pas une sauvegarde valide</translation>
+    </message>
+    <message>
+        <source>Error while decrypting backup</source>
+        <translation>Erreur lors du déchiffrement de la sauvegarde</translation>
+    </message>
+    <message>
+        <source>Appleseed</source>
+        <translation>Appleseed</translation>
     </message>
 </context>
 <context>
@@ -144,6 +152,10 @@
         <translation>Migre les messages SMS, MMS et RCS avec leurs pièces jointes</translation>
     </message>
     <message>
+        <source>Migration completed! You can now close this app</source>
+        <translation>Migration terminée ! Vous pouvez maintenant fermer l&apos;app</translation>
+    </message>
+    <message>
         <source>Select data to migrate</source>
         <translation>Sélectionner les données à migrer</translation>
     </message>
@@ -162,6 +174,10 @@
     <message>
         <source>Migrating...</source>
         <translation>Migration...</translation>
+    </message>
+    <message>
+        <source>Migration already done</source>
+        <translation>Migration déjà effectuée</translation>
     </message>
     <message>
         <source>Error</source>

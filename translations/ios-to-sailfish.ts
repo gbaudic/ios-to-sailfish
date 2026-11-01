@@ -27,7 +27,7 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>iOS to Sailfish</source>
+        <source>Appleseed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -78,7 +78,7 @@
     </message>
 </context>
 <context>
-    <name>SecondPage</name>
+    <name>SelectionPage</name>
     <message>
         <source>Contacts (%1)</source>
         <translation type="unfinished"></translation>
@@ -181,6 +181,10 @@
     </message>
     <message>
         <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No migration selected</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

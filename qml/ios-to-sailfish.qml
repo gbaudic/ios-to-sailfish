@@ -28,7 +28,10 @@ ApplicationWindow {
             setHandler('encrypted-backup', encryptedBackup)
             setHandler('not-a-backup', notABackup)
             setHandler('decryption-error', decryptionError)
+            setHandler('analysis-complete', analysisComplete)
             setHandler('migration-ready', migrationReady)
+            setHandler('migration-progress', migrationProgress)
+            setHandler('migration-complete', migrationComplete)
 
             addImportPath(Qt.resolvedUrl('.'));
 

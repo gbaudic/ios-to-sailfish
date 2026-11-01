@@ -22,8 +22,8 @@ import os
 class Extractor(object):
     """ Base class for data extraction plugins """
     
-    def __init__(self, input, output):
-        self.backup_dir = input
+    def __init__(self, input_dir, output):
+        self.backup_dir = input_dir
         self.output_dir = output
         self.is_dry_run = False
         

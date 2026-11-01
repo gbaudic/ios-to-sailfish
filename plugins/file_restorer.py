@@ -72,8 +72,8 @@ class FileRestorer(Extractor):
 class PictureExtractor(FileRestorer):
     """ Dedicated restorer for images and videos"""
 
-    def __init__(self, input, output):
-        super().__init__(input, output)
+    def __init__(self, input_dir, output):
+        super().__init__(input_dir, output)
         self.output_dir = os.path.join(os.path.expanduser("~"), "Pictures", "Camera")
     
     def apply(self):
@@ -106,8 +106,8 @@ class RecordingExtractor(FileRestorer):
 class UserFilesExtractor(FileRestorer):
     """ Dedicated restorer for user files """
 
-    def __init__(self, input, output):
-        super().__init__(input, output)
+    def __init__(self, input_dir, output):
+        super().__init__(input_dir, output)
         self.output_dir = os.path.join(os.path.expanduser("~"), "Documents")
     
     def apply(self):

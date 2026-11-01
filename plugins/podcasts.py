@@ -55,9 +55,9 @@ def create_outline(doc, title, text, xml_url, html_url):
 class PodcastExtractor(Extractor):
     """Export the list of podcasts to a local file in OPML 1.1 format."""
     
-    def __init__(self, input, output):
+    def __init__(self, input_dir, output):
         self.filename = "Podcasts.opml"
-        super().__init__(input, output)
+        super().__init__(input_dir, output)
     
     def get_db_source(self):
         return "398be25b8d2881e4a18865f018eb5d8e3c8fc962"

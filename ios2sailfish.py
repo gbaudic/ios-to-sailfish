@@ -25,6 +25,8 @@ import sys
 import argparse
 from extractor import Extractor
 from pathlib import Path
+sys.path.append(os.path.join(os.path.dirname(sys.path[0]), 'ios-backup-core', 'src'))
+from ios_backup_core import BackupReader
 
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s')
 logger = logging.getLogger()
@@ -63,10 +65,15 @@ if __name__ == '__main__':
         logger.error('File does not exist')
         sys.exit(1)
     loaded_plugins = load_plugins('plugins', args.backup_path, args.output_dir)
+    reader = BackupReader.from_path(args.backup_path)
+    contacts = reader.contacts()
+    messages = reader.messages()
+    calls = reader.calls()
+    notes = reader.notes()
     for plugin in loaded_plugins:
         logger.info('Running plugin %s', plugin.__class__.__name__)
         try:
             if plugin.should_run():
                 plugin.apply()
         except NotImplementedError:
-            logger.warn('No implementation, skipping this plugin')
+            logger.warning('No implementation, skipping this plugin')

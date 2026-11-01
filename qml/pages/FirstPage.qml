@@ -42,7 +42,7 @@ Page {
             Notices.show(qsTr("Error while decrypting backup"))
         }
         onMigrationReady: {
-            pageStack.push(Qt.resolvedUrl("SecondPage.qml"), { isEncrypted: isEncrypted })
+            pageStack.push(Qt.resolvedUrl("SelectionPage.qml"), { isEncrypted: isEncrypted })
         }
     }
 
@@ -82,6 +82,7 @@ Page {
                 horizontalAlignment: "AlignHCenter"
                 text: qsTr("Please select the folder containing backup data")
                 visible: directoryPath === ""
+                font.pixelSize: Theme.fontSizeLarge
             }
         }
     }

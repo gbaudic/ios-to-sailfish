@@ -69,7 +69,7 @@ def migrate_pictures_and_videos():
 def migrate_user_docs():
     pass
 
-def migrate(**kwargs):
+def migrate(migrations):
     """ Parent function to call specific migrations """
     pass
 

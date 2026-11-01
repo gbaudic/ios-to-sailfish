@@ -19,7 +19,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Contacts 1.0
-import io.thp.pyotherside 1.4
 
 Page {
     id: selectPage
@@ -167,7 +166,6 @@ Page {
             id: delegate
             contentHeight: Theme.itemSizeMedium
             property var itemData: model
-            property alias checked: checkbox.checked
             property string name: model.key
 
             TextSwitch {
@@ -176,7 +174,13 @@ Page {
                 text: qsTr(itemData.name).arg(itemData.count)
                 description: qsTr(itemData.description)
                 checked: itemData.checked
-                enabled: itemData.enabled
+                enabled:  {
+                    var result = itemData.count > 0 && !isMigrating
+                    if (itemData.key === "calls") {
+                        result = result && isEncrypted
+                    }
+                    return result
+                }
             }
             ProgressBar {
                 id: progressBar
@@ -197,7 +201,7 @@ Page {
             MenuItem {
                 text: qsTr("Start migration")
                 onClicked: { 
-                    if (!isComplete) {  // Avoid repeated runs
+                    if (!isComplete && !isMigrating) {  // Avoid repeated runs
                         remorse.execute(qsTr("Migrating..."), doMigrate)
                     } else {
                         Notices.show(qsTr("Migration already done"), Notice.Short)
@@ -239,8 +243,22 @@ Page {
     }
     
     function doMigrate() {
-        isMigrating = true
-        python.migrate()
+        // Identify what to migrate
+        var migrations = []
+        for (var i = 0; i < model.count ; i++) {
+            var element = model.get(i)
+            if (element.checked) {
+                migrations.push(element.key)
+            }
+        }
+
+        // Basic sanity check
+        if (migrations.length === 0) {
+            Notices.show(qsTr("No migration selected"))
+        } else {
+            isMigrating = true
+            python.migrate(migrations)
+        }
     }
     
     function importContact(vcard) {

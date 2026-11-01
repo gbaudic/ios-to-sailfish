@@ -30,7 +30,7 @@ DISTFILES += qml/ios-to-sailfish.qml \
     qml/pages/AboutPage.qml \
     qml/pages/FirstPage.qml \
     qml/pages/PasswordDialog.qml \
-    qml/pages/SecondPage.qml \
+    qml/pages/SelectionPage.qml \
     rpm/ios-to-sailfish.changes.in \
     rpm/ios-to-sailfish.changes.run.in \
     rpm/ios-to-sailfish.spec \

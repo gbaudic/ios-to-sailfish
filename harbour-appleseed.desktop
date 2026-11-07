@@ -1,13 +1,13 @@
 [Desktop Entry]
 Type=Application
 X-Nemo-Application-Type=silica-qt5
-Icon=ios-to-sailfish
-Exec=sailfish-qml ios-to-sailfish
+Icon=harbour-appleseed
+Exec=sailfish-qml harbour-appleseed
 Name=Appleseed
 
 [X-Sailjail]
 OrganizationName=fr.gwilhermbaudic
-ApplicationName=ios-to-sailfish
+ApplicationName=harbour-appleseed
 # A lot of permissions asked here:
 # * Calendar, CommunicationHistory, Contacts, Documents, Messages, Pictures, Videos: to add migrated data at its place
 # * MediaIndexing: just in case because we will add pictures and videos

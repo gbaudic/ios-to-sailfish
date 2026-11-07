@@ -1,4 +1,4 @@
-Name:       ios-to-sailfish
+Name:       harbour-appleseed
 
 # >> macros
 %define __provides_exclude_from ^%{_datadir}/.*$

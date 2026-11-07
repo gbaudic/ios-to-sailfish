@@ -10,7 +10,7 @@
 #   - translation filenames have to be changed
 
 # The name of your application
-TARGET = ios-to-sailfish
+TARGET = harbour-appleseed
 
 CONFIG += sailfishapp_qml
 
@@ -24,18 +24,18 @@ backup.path = $${DEPLOY_PATH}/
 INSTALLS += \
     backup
 
-DISTFILES += qml/ios-to-sailfish.qml \
+DISTFILES += qml/harbour-appleseed.qml \
     qml/bridge.py \
     qml/cover/CoverPage.qml \
     qml/pages/AboutPage.qml \
     qml/pages/FirstPage.qml \
     qml/pages/PasswordDialog.qml \
     qml/pages/SelectionPage.qml \
-    rpm/ios-to-sailfish.changes.in \
-    rpm/ios-to-sailfish.changes.run.in \
-    rpm/ios-to-sailfish.spec \
+    rpm/harbour-appleseed.changes.in \
+    rpm/harbour-appleseed.changes.run.in \
+    rpm/harbour-appleseed.spec \
     translations/*.ts \
-    ios-to-sailfish.desktop
+    harbour-appleseed.desktop
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
@@ -43,4 +43,4 @@ SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 # following CONFIG line
 CONFIG += sailfishapp_i18n
 
-TRANSLATIONS += translations/ios-to-sailfish-fr.ts
+TRANSLATIONS += translations/harbour-appleseed-fr.ts

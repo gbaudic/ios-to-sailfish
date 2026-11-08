@@ -18,6 +18,8 @@ Requires:   pyotherside-qml-plugin-python3-qt5 >= 1.3.0
 Requires:   libsailfishapp-launcher
 Requires:   python3-sqlite
 Requires:   nemo-qml-plugin-dbus-qt5
+Requires:   libcommhistory-qt5-tools
+Requires:   nemo-qml-plugin-calendar-qt5-tools
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)

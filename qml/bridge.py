@@ -19,18 +19,30 @@
 
 import os
 import shutil
+import re
 import pyotherside
 from pathlib import Path
 from ios_backup_core import BackupReader
 from ios_backup_core.extractors.photos import PhotoExtractor
+from ios_backup_core.extractors.podcasts import podcasts_to_opml
+from ios_backup_core.extractors.calendar_events import events_to_ics
 
 reader = None
 home = Path.home()
 notes = dict()
 photos = dict()
+events = dict()
+calls = dict()
+contacts = dict()
+podcasts = dict()
+loyalty = dict()
+messages = dict()
+docs = dict()
 backup_dir = ""
 
 def open_backup(path, password=None):
+    global reader
+    global backup_dir
     try:
         backup_dir = path
         reader = BackupReader.from_path(path, password)
@@ -46,6 +58,7 @@ def open_backup(path, password=None):
     pass
 
 def migrate_notes(dry_run=False):
+    global notes
     if dry_run:
         notes = reader.notes()
         pyotherside.send('analysis-complete', 'notes', len(notes['notes']))
@@ -58,28 +71,41 @@ def migrate_notes(dry_run=False):
             pyotherside.send('migration-progress', 'notes', i)
     
 def export_podcasts(dry_run=False):
+    global podcasts
+    podcasts = reader.podcasts()
     pass
 
 def export_calendar(dry_run=False):
+    global events
     pass
 
 def export_loyalty(dry_run=False):
+    global loyalty
     pass
 
 def migrate_call_history(dry_run=False):
-    calls = reader.calls()
-    pass
+    global calls
+    if dry_run:
+        calls = reader.calls()
+        pyotherside.send('analysis-complete', 'calls', calls['total'])
+    else:
+        # read everything
+        calls = reader.calls(offset=0, limit=calls['total'])
+        pass
 
 def migrate_contacts(dry_run=False):
+    global contacts
     contacts = reader.contacts()
     pyotherside.send('analysis-complete', 'contacts', len(contacts['contacts']))
     pass
 
 def migrate_messages(dry_run=False):
+    global messages
     messages = reader.messages()
     pass
 
 def migrate_pictures_and_videos(dry_run=False):
+    global photos
     if dry_run:
         media_extractor = PhotoExtractor()
         photos = media_extractor.list_photos(reader._accessor)

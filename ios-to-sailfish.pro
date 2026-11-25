@@ -12,7 +12,7 @@
 # The name of your application
 TARGET = harbour-appleseed
 
-CONFIG += sailfishapp_qml
+CONFIG += sailfishapp_qml sailfishapp_i18n
 
 SOURCES +=
 
@@ -21,8 +21,12 @@ DEPLOY_PATH = /usr/share/$${TARGET}
 backup.files = ios-backup-core/src/*
 backup.path = $${DEPLOY_PATH}/
 
+decrypt.files = iphone_backup_decrypt/src/*
+decrypt.path = $${DEPLOY_PATH}/
+
 INSTALLS += \
-    backup
+    backup \
+    decrypt
 
 DISTFILES += qml/harbour-appleseed.qml \
     qml/bridge.py \
@@ -38,9 +42,5 @@ DISTFILES += qml/harbour-appleseed.qml \
     harbour-appleseed.desktop
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
-
-# to disable building translations every time, comment out the
-# following CONFIG line
-CONFIG += sailfishapp_i18n
 
 TRANSLATIONS += translations/harbour-appleseed-fr.ts

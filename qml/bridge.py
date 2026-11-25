@@ -20,14 +20,21 @@
 import os
 import shutil
 import re
-import pyotherside
+import logging
+import sys
 from pathlib import Path
-from ios_backup_core import BackupReader
+try:
+    import pyotherside
+except ImportError:
+    pyotherside = None
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'ios-backup-core', 'src'))
+from ios_backup_core.backup import BackupReader, LocalBackupAccessor, open_local_backup
 from ios_backup_core.extractors.photos import PhotoExtractor
 from ios_backup_core.extractors.podcasts import podcasts_to_opml
 from ios_backup_core.extractors.calendar_events import events_to_ics
 
 reader = None
+accessor = None
 home = Path.home()
 notes = dict()
 photos = dict()
@@ -37,15 +44,18 @@ contacts = dict()
 podcasts = dict()
 loyalty = dict()
 messages = dict()
+voicemail = dict()
+voice_memos = dict()
 docs = dict()
 backup_dir = ""
 
+
 def open_backup(path, password=None):
-    global reader
-    global backup_dir
+    global reader, accessor, backup_dir
     try:
         backup_dir = path
-        reader = BackupReader.from_path(path, password)
+        accessor = open_local_backup(path, password)
+        reader = BackupReader(accessor)
     except ValueError as e:
         msg = e.args[0]
         if 'Not a valid backup' in msg:
@@ -57,7 +67,8 @@ def open_backup(path, password=None):
         
     pass
 
-def migrate_notes(dry_run=False):
+
+def export_notes(dry_run=False):
     global notes
     if dry_run:
         notes = reader.notes()
@@ -69,19 +80,29 @@ def migrate_notes(dry_run=False):
                 f.write(note['body'])
             i += 1
             pyotherside.send('migration-progress', 'notes', i)
-    
+
+
 def export_podcasts(dry_run=False):
     global podcasts
-    podcasts = reader.podcasts()
-    pass
+    if dry_run:
+        podcasts = reader.podcasts()
+        pyotherside.send('analysis-complete', 'podcasts', len(podcasts['podcasts']))
+    else:
+        opml = podcasts_to_opml(podcasts['podcasts'])
+        with open(os.path.join(home, 'Downloads'), 'w') as f:
+            f.write(opml)
+        pyotherside.send('migration-progress', 'podcasts', len(podcasts['podcasts']))
+
 
 def export_calendar(dry_run=False):
     global events
     pass
 
+
 def export_loyalty(dry_run=False):
     global loyalty
     pass
+
 
 def migrate_call_history(dry_run=False):
     global calls
@@ -93,27 +114,32 @@ def migrate_call_history(dry_run=False):
         calls = reader.calls(offset=0, limit=calls['total'])
         pass
 
+
 def migrate_contacts(dry_run=False):
     global contacts
-    contacts = reader.contacts()
-    pyotherside.send('analysis-complete', 'contacts', len(contacts['contacts']))
+    if dry_run:
+        contacts = reader.contacts()
+        pyotherside.send('analysis-complete', 'contacts', len(contacts['contacts']))
     pass
+
 
 def migrate_messages(dry_run=False):
     global messages
-    messages = reader.messages()
+    if dry_run:
+        messages = reader.messages()
     pass
 
+
 def migrate_pictures_and_videos(dry_run=False):
-    global photos
+    global photos, backup_dir
     if dry_run:
         media_extractor = PhotoExtractor()
-        photos = media_extractor.list_photos(reader._accessor)
-        pyotherside.send('analysis-complete', 'media', photos['total']))
+        photos = media_extractor.list_photos(accessor)
+        pyotherside.send('analysis-complete', 'media', photos['total'])
     else:
         i = 0
         for media in photos['photos']:
-            source_path = os.path.join(self.backup_dir, media['file_hash'][:2], media['file_hash'])
+            source_path = os.path.join(backup_dir, media['file_hash'][:2], media['file_hash'])
 
             destination_path = os.path.join(home,
                 'Movies' if media['kind'] == 'video' else 'Pictures',
@@ -127,7 +153,22 @@ def migrate_pictures_and_videos(dry_run=False):
 
 
 def migrate_user_docs(dry_run=False):
+    global docs, backup_dir
     pass
+
+
+def export_voice_memos(dry_run=False):
+    global voice_memos, backup_dir
+    pass
+
+
+def export_voicemail(dry_run=False):
+    global voicemail
+    if dry_run:
+        voicemail = reader.voicemail()
+        pyotherside.send('analysis-complete', 'voicemail', len(voicemail['voicemails']))
+    pass
+
 
 def migrate(migrations, dry_run=False):
     """ Parent function to call specific migrations """
@@ -135,14 +176,22 @@ def migrate(migrations, dry_run=False):
         migrate_call_history(dry_run)
         migrate_contacts(dry_run)
         migrate_messages(dry_run)
-        migrate_notes(dry_run)
+        export_notes(dry_run)
         migrate_pictures_and_videos(dry_run)
         migrate_user_docs(dry_run)
         export_calendar(dry_run)
         export_loyalty(dry_run)
         export_podcasts(dry_run)
+        export_voice_memos(dry_run)
+        export_voicemail(dry_run)
     else:
         # Only migrate what is in the migrations list
         pass
     pass
 
+
+if __name__ == '__main__':
+    global backup_dir
+    backup_dir = sys.argv[1]
+    migrate([], True)
+    pass
